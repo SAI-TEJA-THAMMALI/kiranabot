@@ -1,31 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
 :root {
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial,
-    'Noto Sans', 'Liberation Sans', sans-serif;
-  color: #111;
-  background: #f4f6f8;
+  font-family: 'DM Sans', ui-sans-serif, sans-serif;
+  color: #e2eaf0;
+  background: #08101a;
+  --teal: #00a884;
+  --teal-dark: #008c6e;
+  --teal-glow: rgba(0,168,132,0.18);
+  --bg-deep: #08101a;
+  --bg-mid: #111c26;
+  --bg-card: #16222e;
+  --bg-input: #1e2f3e;
+  --border: rgba(255,255,255,0.06);
+  --text: #e2eaf0;
+  --muted: #5e7a8a;
+  --font-ui: 'DM Sans', sans-serif;
+  --font-mono: 'Space Mono', monospace;
 }
 
 .kb-app {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 16px;
-  padding: 16px;
   height: 100vh;
-  box-sizing: border-box;
+  width: 100vw;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background: var(--bg-deep);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Mesh gradient background */
+.kb-app::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, rgba(0,168,132,0.13) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 30% at 80% 100%, rgba(0,100,80,0.10) 0%, transparent 70%);
+}
+
+/* Subtle grid lines */
+.kb-app::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0,168,132,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,168,132,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.kb-shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: minmax(0, 2.5fr) minmax(0, 1.15fr);
+  gap: 14px;
+  padding: 16px;
 }
 
 .kb-left,
 .kb-right {
+  min-width: 0;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.kb-sidePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
 }
 
 .kb-card {
-  background: white;
-  border: 1px solid #e6e9ee;
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  color: var(--text);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+
+.kb-card:nth-of-type(1) { flex: 1.1; }
+.kb-card:nth-of-type(2) { flex: 0.9; }
 
 .kb-cardHeader {
   display: flex;
@@ -35,41 +103,44 @@
   gap: 12px;
 }
 
+.kb-cardTitle {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
 .kb-row {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.kb-btn {
-  border: 1px solid #d6dbe3;
-  background: #fff;
-  border-radius: 10px;
-  padding: 8px 10px;
-  cursor: pointer;
-}
-
 .kb-badge {
-  border: 1px solid #e6e9ee;
   border-radius: 999px;
-  padding: 4px 8px;
-  font-size: 12px;
-  background: #fafbfc;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
 }
 
 .kb-ok {
-  border-color: #c7efdd;
-  background: #edfff6;
+  background: rgba(0,168,132,0.15);
+  color: var(--teal);
+  border: 1px solid rgba(0,168,132,0.25);
 }
 
 .kb-warn {
-  border-color: #ffe2b5;
-  background: #fff7ea;
+  background: rgba(240,192,64,0.12);
+  color: #f0c040;
+  border: 1px solid rgba(240,192,64,0.2);
 }
 
 .kb-muted {
-  color: #667085;
-  font-size: 14px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .kb-strong {
@@ -77,9 +148,44 @@
 }
 
 .kb-error {
-  border: 1px solid #ffc7c7;
-  background: #fff0f0;
-  padding: 8px;
   border-radius: 10px;
+  padding: 8px 10px;
+  background: rgba(239,83,80,0.12);
+  color: #ff7a7a;
+  font-size: 12px;
 }
 
+/* ── RESPONSIVE ───────────────────────── */
+@media (max-width: 900px) {
+  .kb-app {
+    align-items: flex-start;
+  }
+
+  .kb-shell {
+    max-width: 100%;
+    height: 100vh;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 0;
+    padding: 0;
+  }
+
+  .kb-right {
+    padding: 10px;
+    max-height: 45vh;
+  }
+
+  .kb-sidePanel {
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 600px) {
+  .kb-sidePanel {
+    flex-direction: column;
+  }
+
+  .kb-right {
+    max-height: none;
+  }
+}

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import AttachmentButton from './AttachmentButton.jsx'
 
 export default function InputBar({ onSend }) {
   const [text, setText] = useState('')
+  const fileInputRef = useRef(null)
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -12,9 +13,33 @@ export default function InputBar({ onSend }) {
     setText('')
   }
 
+  function handleAttachClick() {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  function handleFileChange(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // For now we just echo that an invoice was selected into the chat.
+    onSend(`📄 Invoice selected: ${file.name}`)
+
+    // reset input so selecting the same file again still triggers change
+    e.target.value = ''
+  }
+
   return (
     <form className="kb-inputBar" onSubmit={handleSubmit}>
-      <AttachmentButton onClick={() => alert('Upload demo placeholder')} />
+      <AttachmentButton onClick={handleAttachClick} />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
       <input
         className="kb-input"
         value={text}
@@ -22,7 +47,7 @@ export default function InputBar({ onSend }) {
         placeholder="Type a message…"
       />
       <button className="kb-sendBtn" type="submit">
-        Send
+        ➤
       </button>
     </form>
   )
