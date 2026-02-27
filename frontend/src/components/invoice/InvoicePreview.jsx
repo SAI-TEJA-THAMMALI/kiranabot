@@ -1,4 +1,11 @@
+import { useEffect, useState } from 'react'
 export default function InvoicePreview({ fields = null, confidence = 50, gstStatus = 'ok' }) {
+  const [animatedConf, setAnimatedConf] = useState(0)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setAnimatedConf(confidence), 300)
+    return () => clearTimeout(timer)
+  }, [confidence])
   return (
     <div className="kb-card">
       <div className="kb-cardHeader">
@@ -15,7 +22,7 @@ export default function InvoicePreview({ fields = null, confidence = 50, gstStat
       <div className="kb-confRow">
         <span>Extraction</span>
         <div className="kb-confBar">
-          <div className="kb-confFill" style={{ width: `${confidence}%` }} />
+        <div className="kb-confFill" style={{ width: `${animatedConf}%`, transition: 'width 1.2s cubic-bezier(0.4,0,0.2,1)' }} />
         </div>
         <span>{confidence}%</span>
       </div>
