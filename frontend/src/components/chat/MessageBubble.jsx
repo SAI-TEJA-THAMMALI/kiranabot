@@ -1,7 +1,11 @@
 export default function MessageBubble({ role, text, time }) {
   const isUser = role === 'user'
-  const timestamp = time ?? new Date().toLocaleTimeString([], {
-    hour: '2-digit', minute: '2-digit'
+
+  // use passed time, or generate now as fallback
+  const timestamp = time ?? new Date().toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
   })
 
   return (

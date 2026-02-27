@@ -3,6 +3,7 @@ import './styles/chat.css'
 import ChatWindow from './components/chat/ChatWindow.jsx'
 import InvoicePreview from './components/invoice/InvoicePreview.jsx'
 import GSTR1Preview from './components/gstr1/GSTR1Preview.jsx'
+import ToastContainer from './components/shared/ToastContainer.jsx'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   )
 }
