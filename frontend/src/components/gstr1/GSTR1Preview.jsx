@@ -9,6 +9,8 @@ export default function GSTR1Preview() {
     <div className="kb-card">
       <div className="kb-cardHeader">
         <div>GSTR-1 Preview</div>
+      </div>
+      <div className="kb-gstr1ExportRow">
         <ExportButton rows={rows} />
       </div>
       {rows.length === 0 ? (
