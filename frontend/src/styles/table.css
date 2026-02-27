@@ -1,0 +1,25 @@
+.kb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.kb-table th,
+.kb-table td {
+  border-top: 1px solid #eef0f3;
+  padding: 8px 6px;
+  text-align: left;
+}
+
+.kb-gstr1 {
+  display: grid;
+  gap: 8px;
+}
+
+.kb-gstr1Row {
+  border: 1px solid #eef0f3;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+

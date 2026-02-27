@@ -1,0 +1,10 @@
+Always read CLAUDE.md before suggesting any code.
+This is KiranaBot — a GST invoice processing hackathon project.
+Backend is FastAPI in /backend folder only.
+Frontend is React + Vite in /frontend folder only.
+AI pipeline uses Gemini Vision for OCR and Groq for chat.
+Database is Supabase.
+Never modify files outside your assigned folder.
+Keep all solutions simple and demo-ready.
+Prioritize working demo over perfect code.
+Use existing patterns found in the codebase.

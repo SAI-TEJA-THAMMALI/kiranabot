@@ -1,0 +1,31 @@
+name: Recovery Snapshot
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.name "Recovery Bot"
+          git config user.email "recovery@kiranabot.com"
+
+      - name: Merge dev into recovery
+        run: |
+          git fetch origin
+          git checkout recovery
+          git merge origin/dev --no-ff -m "auto: recovery snapshot $(date '+%Y-%m-%d %H:%M')"
+          git push origin recovery
