@@ -31,4 +31,4 @@ for line in lines:
 
 path = os.path.join('..', 'invoice_samples', 'clean_printed.png')
 img.save(path)
-print(f"Created: {path} — 800x1000 pixels")
+print(f"Created: {path} — 800x1000 pixels") 
