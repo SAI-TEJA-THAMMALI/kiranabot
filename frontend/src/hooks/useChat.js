@@ -20,8 +20,59 @@ export function useChat() {
   const [isTyping, setIsTyping]         = useState(false)
   const [invoiceCount, setInvoiceCount] = useState(0)
 
-  // ── Init session on mount ──────────────────────
+  // ── Real upload to backend ─────────────────────
+  const handleUpload = async (file) => {
+    addMsg('user', `📎 ${file.name}`)
+    setIsTyping(true)
+    addMsg('bot', '🔍 Reading your invoice...')
+
+    const result = await API.uploadInvoice(
+      file,
+      window.__kbSession || 'default'
+    )
+
+    setIsTyping(false)
+
+    // Preflight failed
+    if (result.status === 'preflight_failed') {
+      addMsg('bot', `📸 ${result.message}`)
+      showToast(result.message, 'error')
+      return
+    }
+
+    // Success
+    if (result.status === 'success') {
+      setInvoiceCount(c => c + 1)
+
+      addMsg('bot',
+        result.chat_response ||
+        `✅ Invoice processed!\n` +
+        `Added as ${result.validation
+          ?.classification?.type || 'B2CS'}.`
+      )
+
+      showToast('Invoice processed!', 'success')
+
+      // Broadcast to InvoicePreview + GSTR1Preview
+      window.dispatchEvent(
+        new CustomEvent('invoice-uploaded', {
+          detail: result
+        })
+      )
+      return
+    }
+
+    // Error
+    addMsg('bot', '❌ Could not process. Please try again.')
+    showToast('Upload failed', 'error')
+  }
+
+  // ── Init session on mount + listen for kb-file-upload ──
   useEffect(() => {
+    const fileHandler = (e) => {
+      const file = e.detail
+      if (file instanceof File) handleUpload(file)
+    }
     init()
     window.addEventListener('kb-file-upload', fileHandler)
     return () =>
@@ -86,53 +137,6 @@ export function useChat() {
         }, 600)
       }
     }
-  }
-
-  // ── Real upload to backend ─────────────────────
-  const handleUpload = async (file) => {
-    addMsg('user', `📎 ${file.name}`)
-    setIsTyping(true)
-    addMsg('bot', '🔍 Reading your invoice...')
-
-    const result = await API.uploadInvoice(
-      file,
-      window.__kbSession || 'default'
-    )
-
-    setIsTyping(false)
-
-    // Preflight failed
-    if (result.status === 'preflight_failed') {
-      addMsg('bot', `📸 ${result.message}`)
-      showToast(result.message, 'error')
-      return
-    }
-
-    // Success
-    if (result.status === 'success') {
-      setInvoiceCount(c => c + 1)
-
-      addMsg('bot',
-        result.chat_response ||
-        `✅ Invoice processed!\n` +
-        `Added as ${result.validation
-          ?.classification?.type || 'B2CS'}.`
-      )
-
-      showToast('Invoice processed!', 'success')
-
-      // Broadcast to InvoicePreview + GSTR1Preview
-      window.dispatchEvent(
-        new CustomEvent('invoice-uploaded', {
-          detail: result
-        })
-      )
-      return
-    }
-
-    // Error
-    addMsg('bot', '❌ Could not process. Please try again.')
-    showToast('Upload failed', 'error')
   }
 
   // ── Expose upload for AttachmentButton direct call ──
