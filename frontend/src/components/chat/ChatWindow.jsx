@@ -8,8 +8,12 @@ export default function ChatWindow() {
   const { messages, isTyping, sendMessage, invoiceCount } = useChat()
 
   function handleFileSelect(file) {
-    sendMessage(`📎 ${file.name}`)
+    sendMessage(`📎 ${file.name}`)     // keeps chat bubble
     console.log('File ready to upload:', file)
+    // Directly trigger backend upload with real File object
+    window.dispatchEvent(new CustomEvent('kb-file-upload', {
+      detail: file
+    }))
   }
 
   return (
