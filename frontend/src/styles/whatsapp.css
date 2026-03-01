@@ -18,6 +18,24 @@
   --font-mono: 'Space Mono', monospace;
 }
 
+/* make html/body fully stretch too */
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .kb-app {
   height: 100vh;
   width: 100vw;
@@ -54,30 +72,36 @@
   background-size: 48px 48px;
 }
 
+/* ── SHELL GRID ── */
 .kb-shell {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1280px;
+  height: 100%;           /* ← fills full viewport height */
+  max-width: 100%;        /* ← no width cap, edge to edge */
   display: grid;
   grid-template-columns: minmax(0, 2.5fr) minmax(0, 1.15fr);
   gap: 14px;
   padding: 16px;
+  box-sizing: border-box;
 }
 
 .kb-left,
 .kb-right {
   min-width: 0;
   min-height: 0;
+  height: 100%;           /* ← each column fills full height */
   display: flex;
   flex-direction: column;
 }
 
+/* ── SIDE PANEL ── */
 .kb-sidePanel {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: 100%;
+  height: 100%;           /* ← panel stretches full height */
+  flex: 1;
 }
 
 .kb-card {
@@ -90,6 +114,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0;          /* ← prevents cards overflowing flex parent */
 }
 
 .kb-card:nth-of-type(1) { flex: 1.1; }
@@ -101,6 +126,7 @@
   align-items: center;
   margin-bottom: 10px;
   gap: 12px;
+  flex-shrink: 0;         /* ← header never shrinks */
 }
 
 .kb-cardTitle {
@@ -155,24 +181,30 @@
   font-size: 12px;
 }
 
-/* ── RESPONSIVE ───────────────────────── */
+/* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .kb-app {
     align-items: flex-start;
   }
 
   .kb-shell {
-    max-width: 100%;
     height: 100vh;
+    max-width: 100%;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
     gap: 0;
     padding: 0;
   }
 
+  .kb-left {
+    height: auto;
+    flex: 1;
+  }
+
   .kb-right {
+    height: auto;
     padding: 10px;
-    max-height: 45vh;
+    max-height: 40vh;
   }
 
   .kb-sidePanel {
