@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import json
 import os
-from pathlib import Path
+from pathlib import Path #what does this pathlib do
 from dotenv import load_dotenv
 
 env_path = Path(__file__).parent.parent.parent / '.env'

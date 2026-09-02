@@ -11,7 +11,7 @@ _client = None
 def get_supabase():
     global _client
     if _client is None:
-        url = os.getenv("SUPABASE_URL")
+        url = os.getenv("SUPABASE_URL") #what os.getenv do?
         key = os.getenv("SUPABASE_KEY")
         if not url or not key:
             raise ValueError("Supabase credentials missing in .env")

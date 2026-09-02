@@ -1,8 +1,7 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File,Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from dotenv import load_dotenv
-import os
 from fastapi.responses import Response
 import csv, io
 
@@ -16,6 +15,10 @@ from core.pipeline import run_full_pipeline
 from core.chat import generate_chat_response
 from db.invoice_ops import save_invoice, get_invoices
 from db.session_ops import create_session, get_session
+from db.database import get_db
+from sqlalchemy import select, text
+from sqlalchemy.orm import Session
+from db.models import User
 
 app = FastAPI(title="KiranaBot API")
 
@@ -25,7 +28,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/health/db")
+def check_database(db: Session = Depends(get_db)):
+    result = db.execute(select(User))
 
+    users = result.scalars().all()
+
+    return {
+        "count": len(users),
+        "users": [
+            {
+                "id": str(user.id),
+                "email": user.email
+            }
+            for user in users
+        ]
+    }
 @app.get("/ping")
 def ping():
     return {"status": "working"}

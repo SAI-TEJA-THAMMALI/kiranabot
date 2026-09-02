@@ -1,6 +1,6 @@
 import csv
 import io
-
+#what is stringio used for and how this works?
 def generate_gstr1_csv(rows: list[dict]) -> str:
     output = io.StringIO()
     if not rows:

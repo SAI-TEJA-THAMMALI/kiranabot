@@ -6,12 +6,12 @@ def create_session(period: str) -> dict:
         result = db.table("sessions").insert({
             "period": period
         }).execute()
-        return result.data[0] if result.data else {}
+        return result.data[0] if result.data else {} #why is result.data is array what else is being returned
     except Exception as e:
         print(f"Create session error: {e}")
         return {"id": "offline-session", "period": period}
 
-def get_session(session_id: str) -> dict:
+def get_session(session_id: str) -> dict: 
     try:
         db = get_supabase()
         result = db.table("sessions").select(
