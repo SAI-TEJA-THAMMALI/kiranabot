@@ -5,9 +5,10 @@ from sqlalchemy import DateTime, ForeignKey, String, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
+
 from .base import Base
 
-
+from sqlalchemy.orm import relationship
 class Message(Base):
     __tablename__ = "messages"
 
@@ -37,4 +38,7 @@ class Message(Base):
         DateTime(timezone=True),
         nullable=False,
         server_default=func.now()
+    )
+    conversation: Mapped["Conversation"] = relationship(
+    back_populates="messages"
     )

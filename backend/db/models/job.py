@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import Base
 
@@ -66,3 +66,6 @@ class Job(Base):
         nullable=False,
         server_default=func.now()
     )
+    invoice: Mapped["Invoice"] = relationship(
+    back_populates="jobs"
+)

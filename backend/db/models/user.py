@@ -2,8 +2,10 @@ import uuid
 from datetime import datetime
 from sqlalchemy import String,DateTime,func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import  Mapped,mapped_column
+from sqlalchemy.orm import  Mapped,mapped_column,relationship
 from .base import Base
+from .conversation import Conversation
+
 
 class User(Base):
     __tablename__="users"
@@ -25,4 +27,11 @@ class User(Base):
     updated_at:Mapped[datetime]=mapped_column(
         DateTime(timezone=False),
         nullable=False
+    )
+    invoices: Mapped[list["Invoice"]] = relationship(
+        back_populates="user"
+    )
+
+    conversations: Mapped[list["Conversation"]] = relationship(
+        back_populates="user"
     )

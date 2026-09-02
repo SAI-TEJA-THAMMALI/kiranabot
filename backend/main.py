@@ -16,9 +16,8 @@ from core.chat import generate_chat_response
 from db.invoice_ops import save_invoice, get_invoices
 from db.session_ops import create_session, get_session
 from db.database import get_db
-from sqlalchemy import select, text
+from sqlalchemy import text
 from sqlalchemy.orm import Session
-from db.models import User
 
 app = FastAPI(title="KiranaBot API")
 
@@ -30,20 +29,13 @@ app.add_middleware(
 )
 @app.get("/health/db")
 def check_database(db: Session = Depends(get_db)):
-    result = db.execute(select(User))
-
-    users = result.scalars().all()
-
+    result = db.execute(text("SELECT 1"))
     return {
-        "count": len(users),
-        "users": [
-            {
-                "id": str(user.id),
-                "email": user.email
-            }
-            for user in users
-        ]
+        "database": "connected",
+        "result": result.scalar()
+
     }
+
 @app.get("/ping")
 def ping():
     return {"status": "working"}

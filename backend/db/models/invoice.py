@@ -4,7 +4,10 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID,JSONB
 from datetime import datetime
 
+
+
 from .base import Base
+from sqlalchemy.orm import relationship
 
 class Invoice(Base):
     __tablename__= "invoices"
@@ -59,3 +62,11 @@ class Invoice(Base):
         server_default=func.now()
 
     )
+    user: Mapped["User"] = relationship(
+    back_populates="invoices"
+    )
+
+    jobs: Mapped[list["Job"]] = relationship(
+        back_populates="invoice"
+    )
+    
