@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import DateTime, ForeignKey, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -25,12 +25,12 @@ class Message(Base):
     )
 
     role: Mapped[str] = mapped_column(
-        String,
+        Text,
         nullable=False
     )
 
     content: Mapped[str] = mapped_column(
-        String,
+        Text,
         nullable=False
     )
 

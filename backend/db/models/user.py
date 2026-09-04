@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import String,DateTime,func
+from sqlalchemy import Text, DateTime, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import  Mapped,mapped_column,relationship
 from .base import Base
@@ -17,8 +17,9 @@ class User(Base):
     )
 
     email:Mapped[str] = mapped_column(
-        String,
-        nullable=False
+        Text,
+        nullable=False,
+        unique=True
     )
     created_at: Mapped[datetime]=mapped_column(
         DateTime(timezone=False),

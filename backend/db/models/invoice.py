@@ -1,4 +1,4 @@
-from sqlalchemy import DateTime,ForeignKey,String,func
+from sqlalchemy import DateTime,ForeignKey,Text,func
 from sqlalchemy.orm import Mapped,mapped_column
 import uuid
 from sqlalchemy.dialects.postgresql import UUID,JSONB
@@ -18,9 +18,9 @@ class Invoice(Base):
     )
 
     file_hash: Mapped[str] = mapped_column(
-        String,
+        Text,
         nullable=False,
-
+        unique=True
     )
     user_id: Mapped[uuid.UUID]=mapped_column(
         UUID(as_uuid=True),
@@ -28,8 +28,8 @@ class Invoice(Base):
         nullable=False
 
     )
-    Invoice_file_link: Mapped[str | None]=mapped_column(
-        String,
+    invoice_file_link: Mapped[str | None]=mapped_column(
+        Text,
         nullable=True
     )
     ocr_result: Mapped[dict]=mapped_column(
@@ -38,7 +38,7 @@ class Invoice(Base):
         server_default='{}'
     )
     status:Mapped[str] = mapped_column(
-        JSONB,
+        Text,
         nullable=False,
         server_default="Processing"
     )
@@ -48,7 +48,7 @@ class Invoice(Base):
         server_default='{}'
     )
     filename: Mapped[str]=mapped_column(
-        String,
+        Text,
         nullable=False
     )
     created_at: Mapped[datetime | None]=mapped_column(

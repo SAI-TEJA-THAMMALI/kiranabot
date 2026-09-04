@@ -10,6 +10,8 @@ import csv, io
 env_path = Path(__file__).parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
+from db.models.job import Job
+from repositories.job_repository import JobRepository
 from core.preflight import preflight_check
 from core.pipeline import run_full_pipeline
 from core.chat import generate_chat_response
@@ -148,3 +150,52 @@ async def fetch_session(session_id: str):
 @app.get("/session/{session_id}/invoices")
 async def fetch_invoices(session_id: str):
     return get_invoices(session_id)
+
+from uuid import UUID
+
+from db.models import Invoice
+from repositories.invoice_repository import InvoiceRepository
+
+
+@app.post("/test/invoices")
+def create_test_invoice(
+    user_id: UUID,
+    db: Session = Depends(get_db)
+):
+    invoice = Invoice(
+        file_hash="test-hash-123",
+        user_id=user_id,
+        invoice_file_link="test.pdf",
+        ocr_result={},
+        validation_results={},
+        status="Processing",
+        filename="test.pdf"
+    )
+
+    repository = InvoiceRepository(db)
+    invoice = repository.create(invoice)
+
+    return {
+        "id": str(invoice.id),
+        "user_id": str(invoice.user_id),
+        "filename": invoice.filename,
+        "status": invoice.status
+    }
+@app.post("/test/jobs")
+def create_test_job(
+    invoice_id: UUID,
+    db: Session = Depends(get_db)
+):
+    job = Job(
+        invoice_id=invoice_id
+    )
+
+    repository = JobRepository(db)
+    job = repository.create(job)
+
+    return {
+        "job_id": str(job.job_id),
+        "invoice_id": str(job.invoice_id),
+        "status": job.status,
+        "retry_count": job.retry_count
+    }

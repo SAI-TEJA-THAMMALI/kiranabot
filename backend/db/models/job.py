@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import DateTime, ForeignKey, Integer, Text, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -24,7 +24,7 @@ class Job(Base):
     )
 
     status: Mapped[str] = mapped_column(
-        String,
+        Text,
         nullable=False,
         server_default="Queued"
     )
@@ -36,12 +36,12 @@ class Job(Base):
     )
 
     worker_id: Mapped[str | None] = mapped_column(
-        String,
+        Text,
         nullable=True
     )
 
     error_message: Mapped[str | None] = mapped_column(
-        String,
+        Text,
         nullable=True
     )
 
