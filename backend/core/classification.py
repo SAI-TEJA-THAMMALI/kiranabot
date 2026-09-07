@@ -1,4 +1,5 @@
 from .validation import validate_gstin
+#what is gstr1 table
 
 def classify_transaction(buyer_gstin: str,
                           invoice_value: float,
@@ -43,7 +44,6 @@ def calculate_confidence(extracted_fields: dict) -> dict:
         if value is None or value == "":
             confidence[field] = "LOW"
         elif field == "gstin":
-            from .validation import validate_gstin
             result = validate_gstin(str(value))
             confidence[field] = "HIGH" if result["valid"] else "LOW"
         elif field in ["invoice_number", "invoice_date"]:

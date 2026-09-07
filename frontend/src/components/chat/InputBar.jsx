@@ -1,55 +1,62 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import AttachmentButton from './AttachmentButton.jsx'
 
-export default function InputBar({ onSend }) {
+export default function InputBar({ onSend, onFileSelect }){
   const [text, setText] = useState('')
-  const fileInputRef = useRef(null)
 
-  function handleSubmit(e) {
-    e.preventDefault()
-    const trimmed = text.trim()
-    if (!trimmed) return
-    onSend(trimmed)
+  function handleSend() {
+    if (!text.trim()) return
+    onSend(text.trim())
     setText('')
   }
 
-  function handleAttachClick() {
-    if (fileInputRef.current) {
-      fileInputRef.current.click()
+  function handlePaste(e) {
+    // Prevent default to avoid inserting text into input
+    e.preventDefault();
+
+    // Check for files in clipboard
+    const items = e.clipboardData.items;
+    let foundFile = false;
+
+    for (const item of items) {
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file) {
+          foundFile = true;
+          // Call the file upload handler
+          onFileSelect(file);
+        }
+      }
     }
-  }
 
-  function handleFileChange(e) {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    // For now we just echo that an invoice was selected into the chat.
-    onSend(`📄 Invoice selected: ${file.name}`)
-
-    // reset input so selecting the same file again still triggers change
-    e.target.value = ''
+    // If no file was pasted, we could optionally show a message
+    // For now, we'll just ignore non-file pastes
   }
 
   return (
-    <form className="kb-inputBar" onSubmit={handleSubmit}>
-      <AttachmentButton onClick={handleAttachClick} />
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-      />
-      <input
-        className="kb-input"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Type a message…"
-      />
-      <button className="kb-sendBtn" type="submit">
-        ➤
+    <div className="kb-inputBar">
+      <div className="kb-inputWrap">
+
+        <input
+          className="kb-input"
+          placeholder="Type a message"
+          value={text}
+          onChange={e => setText(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && handleSend()}
+          onPaste={handlePaste}
+        />
+
+        {/* Attach button */}
+        <AttachmentButton onFileSelect={onFileSelect} />
+
+      </div>
+
+      {/* Send button */}
+      <button className="kb-sendBtn" onClick={handleSend} title="Send">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+          <path d="M1.101 21.757 23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"/>
+        </svg>
       </button>
-    </form>
+    </div>
   )
 }
-

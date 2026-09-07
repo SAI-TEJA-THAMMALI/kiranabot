@@ -27,16 +27,23 @@ Invoice Photo → Gemini Vision OCR → Validation → Supabase → GSTR-1 CSV
 - Deploy: Render (backend) + Vercel (frontend)
 
 ## Current Phase
-SETUP — Waiting for hackathon to start
+Phase: INTEGRATION COMPLETE
 
 ## DONE
-- [x] Repo setup
-- [x] Folder structure
-- [x] Branch structure
-- [x] Templates ready
+- [x] T01 Environment setup
+- [x] T05 FastAPI skeleton
+- [x] T08 GSTIN validation
+- [x] T13 Preflight checks
+- [x] T12 Tax math + classification
+- [x] T06 Gemini Vision extraction
+- [x] T11 Full extraction pipeline
+- [x] T16 Supabase read/write
+- [x] T18 Backend integration
+- [x] T21 Demo data seeded
 
 ## IN PROGRESS
-- [ ] Nothing yet
+- [ ] T22 E2E testing with frontend
+- [ ] T23 Render deployment
 
 ## BLOCKED
 - Nothing

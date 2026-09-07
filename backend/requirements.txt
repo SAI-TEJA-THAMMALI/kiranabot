@@ -9,3 +9,6 @@ python-multipart
 supabase
 requests
 pillow
+alembic
+PyJWT
+argon2-cffi

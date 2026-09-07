@@ -58,7 +58,7 @@ def validate_gstin(gstin: str) -> dict:
             "state": ""
         }
 
-    # Checksum validation
+    # Checksum validation whaat is this?
     charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     total = 0
     for i, char in enumerate(gstin[:-1]):
