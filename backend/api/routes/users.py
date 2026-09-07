@@ -94,6 +94,7 @@ def get_user(
     user_id: UUID,
     service: UserService = Depends(get_user_service)
 ):
+
     user = service.get_user(user_id)
 
     if user is None:
