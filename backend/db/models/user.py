@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Text, DateTime, func
+from sqlalchemy import Text, DateTime, func,String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import  Mapped,mapped_column,relationship
 from .base import Base
@@ -21,6 +21,10 @@ class User(Base):
         nullable=False,
         unique=True
     )
+    password_hash: Mapped[str] = mapped_column(
+    String,
+    nullable=False
+)
     created_at: Mapped[datetime]=mapped_column(
         DateTime(timezone=False),
         nullable=False

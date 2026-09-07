@@ -101,9 +101,16 @@ export function useChat() {
   const addMsg = (role, text) =>
     setMessages(prev => [...prev, makeMsg(role, text)])
 
+  // ── Clear chat ─────────────────────
+  const clearChat = () => {
+    setMessages([])
+    setIsTyping(false)
+    // Optionally reset invoice count? Not resetting as it's a count of processed invoices
+    // Optionally re-add welcome message? Not required
+  }
+
   // ── Called by ChatWindow ───────────────────────
   const sendMessage = (textOrFile) => {
-
     // Real File object from input
     if (textOrFile instanceof File) {
       handleUpload(textOrFile)
@@ -111,7 +118,6 @@ export function useChat() {
     }
 
     if (typeof textOrFile === 'string') {
-
       // "📎 filename.jpg" — Person 3 sends filename as text
       // We intercept it and trigger upload with fake file
       if (textOrFile.startsWith('📎')) {
@@ -145,6 +151,7 @@ export function useChat() {
     isTyping,
     invoiceCount,
     sendMessage,
-    handleUpload   // expose so AttachmentButton can call directly
+    handleUpload,
+    clearChat
   }
 }

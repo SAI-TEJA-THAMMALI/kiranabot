@@ -10,6 +10,29 @@ export default function InputBar({ onSend, onFileSelect }){
     setText('')
   }
 
+  function handlePaste(e) {
+    // Prevent default to avoid inserting text into input
+    e.preventDefault();
+
+    // Check for files in clipboard
+    const items = e.clipboardData.items;
+    let foundFile = false;
+
+    for (const item of items) {
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file) {
+          foundFile = true;
+          // Call the file upload handler
+          onFileSelect(file);
+        }
+      }
+    }
+
+    // If no file was pasted, we could optionally show a message
+    // For now, we'll just ignore non-file pastes
+  }
+
   return (
     <div className="kb-inputBar">
       <div className="kb-inputWrap">
@@ -20,6 +43,7 @@ export default function InputBar({ onSend, onFileSelect }){
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSend()}
+          onPaste={handlePaste}
         />
 
         {/* Attach button */}

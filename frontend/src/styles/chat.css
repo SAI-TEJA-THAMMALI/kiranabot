@@ -15,6 +15,12 @@
   .kb-chatWindow { border-radius: 0; }
 }
 
+/* Drag and drop visual feedback */
+.kb-chatWindow.drag-over {
+  border: 2px dashed #00a884;
+  background: rgba(0,168,132,0.02);
+}
+
 /* ══════════════════════════════════════
    HEADER
 ══════════════════════════════════════ */
@@ -98,6 +104,52 @@
   flex-shrink: 0;
 }
 .kb-iconBtn:hover { background: rgba(255,255,255,0.1); }
+
+/* clear chat button */
+.kb-clearBtn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.kb-clearBtn:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* copy button */
+.kb-copyBtn {
+  background: none;
+  border: none;
+  color: #8696a0;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  margin-left: 6px;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.kb-copyBtn:hover {
+  background: rgba(0,0,0,0.08);
+  color: #111b21;
+}
+.kb-copyBtn:active {
+  background: rgba(0,0,0,0.12);
+}
 
 /* invoice badge inside header */
 .kb-invoiceBadge {
@@ -212,8 +264,8 @@
   display: flex;
   margin-bottom: 1px;
 }
-.kb-leftAlign  { justify-content: flex-start; }
-.kb-rightAlign { justify-content: flex-end; }
+.kb-left-align  { justify-content: flex-start; }
+.kb-right-align { justify-content: flex-end; }
 
 .kb-bubble {
   max-width: 65%;
