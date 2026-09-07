@@ -1,38 +1,54 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Text, DateTime, func,String
+
+from sqlalchemy import DateTime, String, func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import  Mapped,mapped_column,relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from .base import Base
-from .conversation import Conversation
 
 
 class User(Base):
-    __tablename__="users"
+    __tablename__ = "users"
 
-    id:Mapped[uuid.UUID] = mapped_column(
+    id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
         primary_key=True,
         server_default=func.gen_random_uuid()
     )
 
-    email:Mapped[str] = mapped_column(
-        Text,
-        nullable=False,
-        unique=True
+    email: Mapped[str] = mapped_column(
+        String,
+        nullable=False
     )
+
     password_hash: Mapped[str] = mapped_column(
-    String,
-    nullable=False
-)
-    created_at: Mapped[datetime]=mapped_column(
-        DateTime(timezone=False),
+        String,
         nullable=False
     )
-    updated_at:Mapped[datetime]=mapped_column(
-        DateTime(timezone=False),
-        nullable=False
+
+    refresh_token: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True
     )
+
+    session_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True),
+        nullable=True
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=False),
+        nullable=False,
+        server_default=func.now()
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=False),
+        nullable=False,
+        server_default=func.now()
+    )
+
     invoices: Mapped[list["Invoice"]] = relationship(
         back_populates="user"
     )

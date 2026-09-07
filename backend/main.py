@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File,Depends
+from fastapi import FastAPI, UploadFile, File, Depends, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from dotenv import load_dotenv
@@ -10,6 +10,7 @@ import csv, io
 env_path = Path(__file__).parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
+from auth.dependecies import get_current_user
 from db.models.job import Job
 from repositories.job_repository import JobRepository
 from core.preflight import preflight_check
@@ -18,10 +19,19 @@ from core.chat import generate_chat_response
 from db.invoice_ops import save_invoice, get_invoices
 from db.session_ops import create_session, get_session
 from db.database import get_db
+from api.routes import users
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 app = FastAPI(title="KiranaBot API")
+
+# API Router for versioning
+api_router = APIRouter(prefix="/api/v1")
+
+# Include User routes
+api_router.include_router(users.router)
+
+app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -29,6 +39,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/me")
+def get_current_user_info(
+    current_user = Depends(get_current_user)
+):
+    return current_user
 @app.get("/health/db")
 def check_database(db: Session = Depends(get_db)):
     result = db.execute(text("SELECT 1"))
